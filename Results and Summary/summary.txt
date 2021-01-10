@@ -1,0 +1,33 @@
+> print(summary(df_new$Production))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  168.4   189.7   206.1   209.0   221.3   265.1 
+> print(summary(df_new$Yield))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   1380    1543    1678    1701    1814    2129 
+> print(summary(df_new$Consumption_of_fertilisers))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  12154   14198   17079   18741   23038   28122 
+> print(summary(df_new$Import_export_ratio))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.1849  0.3141  0.3910  0.4051  0.5178  0.6438 
+> print(summary(df_new$GDP_agriculture_and_Allied_sector))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 154350  338282  491850  670720  863190 1906348 
+> print(summary(df_new$agriculture_share_to_total_gdp))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  17.52   18.25   21.89   22.63   26.48   29.39 
+> print(summary(df_new$Growth_rate_agriculture_gdp))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ -2.720   8.617  13.075  11.910  15.748  21.800 
+> print(summary(df_new$Total_cropped_area))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  173.9   187.2   189.6   189.9   193.1   200.9 
+> print(summary(df_new$electricity_consumption_agriculture))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  50321   83433   89424   95257  105081  152744 
+> print(summary(df_new$Agricultural_exports))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   6013   23220   32191   61227   76271  262779 
+> print(summary(df_new$Total_direct_agricultural_credit))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   5154   14718   37517   57723   82432  202617 

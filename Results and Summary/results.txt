@@ -1,0 +1,810 @@
+#printing 95% confidence interval
+> print(confint(reg1,level=0.95))
+                           2.5 %     97.5 %
+(Intercept)         -0.009815583 0.01228138
+yield               -0.072693232 0.15926409
+import_export_ratio  0.581595167 0.91470106
+> #importing packages
+> library(tseries)
+> library(lmtest)
+> library(dynlm)
+> library(MASS)
+> library(forecast)
+> library(faraway)
+> #reading the csv
+> d=read.csv("agri_gdp1.csv")
+> print(head(d))
+  ï..Year   Area Production Yield Area.Under.Irrigation...
+1    1990 127.84     176.39  1380                    35.07
+2    1991 121.87     168.38  1382                    37.37
+3    1992 123.15     179.48  1457                    37.42
+4    1993 122.75     184.26  1501                    38.66
+5    1994 123.86     191.50  1546                    39.61
+6    1995 121.01     180.42  1491                    40.13
+  agricultural.workers Consumption.of.Fertilisers
+1                185.3                    12546.2
+2                   NA                    12728.0
+3                   NA                    12154.5
+4                   NA                    12366.0
+5                   NA                    13563.0
+6                   NA                    13867.1
+  co.operatives.credit SCB.s.credit
+1                 4819          335
+2                 5797          596
+3                 6484          698
+4                 8484          752
+5                 9876         1083
+6                12483         1381
+  Total.Direct.Agriculture.credit Agricultural.Imports
+1                            5154              1205.86
+2                            6393              1478.27
+3                            7182              2876.25
+4                            9236              2327.33
+5                           10959              5937.21
+6                           13864              5890.10
+  Agricultural.exports Import.Export.ratio
+1              6012.76           0.2005502
+2              7838.04           0.1886020
+3              9040.30           0.3181587
+4             12586.55           0.1849061
+5             13222.76           0.4490144
+6             20397.74           0.2887624
+  Electricity.consumption.for.Agricultural.purposes..GWh.
+1                                                   50321
+2                                                   58557
+3                                                   63328
+4                                                   70699
+5                                                   79301
+6                                                   85732
+  X..Share.of.electricity.for..Agricultural.Consumption.to.Total.Consumption
+1                                                                      26.44
+2                                                                      28.20
+3                                                                      28.70
+4                                                                      29.63
+5                                                                      30.54
+6                                                                      30.95
+  Per.Capita.Net.Availability.of.Foodgrains..Per.Annum..in.India..Kilograms.per.year.
+1                                                                               186.2
+2                                                                               171.1
+3                                                                               169.4
+4                                                                               172.0
+5                                                                               180.8
+6                                                                               173.5
+  Per.Capita.Net.Availability.of.Foodgrains..Per.Day..in.India..Grams.per.day.
+1                                                                        510.1
+2                                                                        468.8
+3                                                                        464.1
+4                                                                        471.2
+5                                                                        495.5
+6                                                                        475.2
+  Net.area.Sown Total.cropped.area Area.sown.more.than.once
+1        143.00             185.74                    42.74
+2        141.63             182.24                    40.61
+3        142.72             185.70                    42.98
+4        142.34             186.58                    44.25
+5        142.96             188.05                    45.09
+6        142.20             187.47                    45.27
+  Net.irrigated.area Gross.irrigated.area
+1              48.02                63.20
+2              49.87                65.68
+3              50.29                66.76
+4              51.34                68.26
+5              53.00                70.65
+6              53.40                71.35
+  Area.Irrigated.more.than.once
+1                         15.18
+2                         15.81
+3                         16.47
+4                         16.92
+5                         17.65
+6                         17.95
+  GDP.Agriculture.and.Allied.sector...at.current.prices.
+1                                                 154350
+2                                                 180313
+3                                                 202219
+4                                                 234566
+5                                                 270107
+6                                                 293701
+  GDP.Agriculture.and.Allied.sector..at.constant.2004.05.prices.
+1                                                         397971
+2                                                         390201
+3                                                         416153
+4                                                         429981
+5                                                         450258
+6                                                         447127
+  X..Share.of.Agriculture.and.Allied.sector.to.total.GDP..at.current.prices.
+1                                                                      29.02
+2                                                                      29.39
+3                                                                      28.74
+4                                                                      28.68
+5                                                                      28.27
+6                                                                      26.26
+  X..Share.of.Agriculture.and.Allied.sector.to.total.GDP..at.constant.2004.05.prices.
+1                                                                               29.53
+2                                                                               28.54
+3                                                                               28.89
+4                                                                               28.24
+5                                                                               27.80
+6                                                                               25.73
+  Growth.Rate.of.GDP.Agri....Allied.Sector..at.current.prices.
+1                                                        16.70
+2                                                        16.82
+3                                                        12.15
+4                                                        16.00
+5                                                        15.15
+6                                                         8.74
+  Growth.Rate.of.GDP.Agri....Allied.Sector..at.constant.2004.05.prices.
+1                                                                  4.02
+2                                                                 -1.95
+3                                                                  6.65
+4                                                                  3.32
+5                                                                  4.72
+6                                                                 -0.70
+> print(nrow(d))
+[1] 30
+> print(ncol(d))
+[1] 29
+> print(names(d))
+ [1] "ï..Year"                                                                            
+ [2] "Area"                                                                               
+ [3] "Production"                                                                         
+ [4] "Yield"                                                                              
+ [5] "Area.Under.Irrigation..."                                                           
+ [6] "agricultural.workers"                                                               
+ [7] "Consumption.of.Fertilisers"                                                         
+ [8] "co.operatives.credit"                                                               
+ [9] "SCB.s.credit"                                                                       
+[10] "Total.Direct.Agriculture.credit"                                                    
+[11] "Agricultural.Imports"                                                               
+[12] "Agricultural.exports"                                                               
+[13] "Import.Export.ratio"                                                                
+[14] "Electricity.consumption.for.Agricultural.purposes..GWh."                            
+[15] "X..Share.of.electricity.for..Agricultural.Consumption.to.Total.Consumption"         
+[16] "Per.Capita.Net.Availability.of.Foodgrains..Per.Annum..in.India..Kilograms.per.year."
+[17] "Per.Capita.Net.Availability.of.Foodgrains..Per.Day..in.India..Grams.per.day."       
+[18] "Net.area.Sown"                                                                      
+[19] "Total.cropped.area"                                                                 
+[20] "Area.sown.more.than.once"                                                           
+[21] "Net.irrigated.area"                                                                 
+[22] "Gross.irrigated.area"                                                               
+[23] "Area.Irrigated.more.than.once"                                                      
+[24] "GDP.Agriculture.and.Allied.sector...at.current.prices."                             
+[25] "GDP.Agriculture.and.Allied.sector..at.constant.2004.05.prices."                     
+[26] "X..Share.of.Agriculture.and.Allied.sector.to.total.GDP..at.current.prices."         
+[27] "X..Share.of.Agriculture.and.Allied.sector.to.total.GDP..at.constant.2004.05.prices."
+[28] "Growth.Rate.of.GDP.Agri....Allied.Sector..at.current.prices."                       
+[29] "Growth.Rate.of.GDP.Agri....Allied.Sector..at.constant.2004.05.prices."              
+> d=d[(1:24),]
+> print(d$Total.Direct.Agriculture.credit)
+ [1]   5154   6393   7182   9236  10959  13864  15002  16262
+ [9]  17614  28663  31261  35115  39919  47224  56936  63423
+[17]  74247  81481  85286  98137 122086 142413 174884 202617
+> print(nrow(d))
+[1] 24
+> print(head(d))
+  ï..Year   Area Production Yield Area.Under.Irrigation...
+1    1990 127.84     176.39  1380                    35.07
+2    1991 121.87     168.38  1382                    37.37
+3    1992 123.15     179.48  1457                    37.42
+4    1993 122.75     184.26  1501                    38.66
+5    1994 123.86     191.50  1546                    39.61
+6    1995 121.01     180.42  1491                    40.13
+  agricultural.workers Consumption.of.Fertilisers
+1                185.3                    12546.2
+2                   NA                    12728.0
+3                   NA                    12154.5
+4                   NA                    12366.0
+5                   NA                    13563.0
+6                   NA                    13867.1
+  co.operatives.credit SCB.s.credit
+1                 4819          335
+2                 5797          596
+3                 6484          698
+4                 8484          752
+5                 9876         1083
+6                12483         1381
+  Total.Direct.Agriculture.credit Agricultural.Imports
+1                            5154              1205.86
+2                            6393              1478.27
+3                            7182              2876.25
+4                            9236              2327.33
+5                           10959              5937.21
+6                           13864              5890.10
+  Agricultural.exports Import.Export.ratio
+1              6012.76           0.2005502
+2              7838.04           0.1886020
+3              9040.30           0.3181587
+4             12586.55           0.1849061
+5             13222.76           0.4490144
+6             20397.74           0.2887624
+  Electricity.consumption.for.Agricultural.purposes..GWh.
+1                                                   50321
+2                                                   58557
+3                                                   63328
+4                                                   70699
+5                                                   79301
+6                                                   85732
+  X..Share.of.electricity.for..Agricultural.Consumption.to.Total.Consumption
+1                                                                      26.44
+2                                                                      28.20
+3                                                                      28.70
+4                                                                      29.63
+5                                                                      30.54
+6                                                                      30.95
+  Per.Capita.Net.Availability.of.Foodgrains..Per.Annum..in.India..Kilograms.per.year.
+1                                                                               186.2
+2                                                                               171.1
+3                                                                               169.4
+4                                                                               172.0
+5                                                                               180.8
+6                                                                               173.5
+  Per.Capita.Net.Availability.of.Foodgrains..Per.Day..in.India..Grams.per.day.
+1                                                                        510.1
+2                                                                        468.8
+3                                                                        464.1
+4                                                                        471.2
+5                                                                        495.5
+6                                                                        475.2
+  Net.area.Sown Total.cropped.area Area.sown.more.than.once
+1        143.00             185.74                    42.74
+2        141.63             182.24                    40.61
+3        142.72             185.70                    42.98
+4        142.34             186.58                    44.25
+5        142.96             188.05                    45.09
+6        142.20             187.47                    45.27
+  Net.irrigated.area Gross.irrigated.area
+1              48.02                63.20
+2              49.87                65.68
+3              50.29                66.76
+4              51.34                68.26
+5              53.00                70.65
+6              53.40                71.35
+  Area.Irrigated.more.than.once
+1                         15.18
+2                         15.81
+3                         16.47
+4                         16.92
+5                         17.65
+6                         17.95
+  GDP.Agriculture.and.Allied.sector...at.current.prices.
+1                                                 154350
+2                                                 180313
+3                                                 202219
+4                                                 234566
+5                                                 270107
+6                                                 293701
+  GDP.Agriculture.and.Allied.sector..at.constant.2004.05.prices.
+1                                                         397971
+2                                                         390201
+3                                                         416153
+4                                                         429981
+5                                                         450258
+6                                                         447127
+  X..Share.of.Agriculture.and.Allied.sector.to.total.GDP..at.current.prices.
+1                                                                      29.02
+2                                                                      29.39
+3                                                                      28.74
+4                                                                      28.68
+5                                                                      28.27
+6                                                                      26.26
+  X..Share.of.Agriculture.and.Allied.sector.to.total.GDP..at.constant.2004.05.prices.
+1                                                                               29.53
+2                                                                               28.54
+3                                                                               28.89
+4                                                                               28.24
+5                                                                               27.80
+6                                                                               25.73
+  Growth.Rate.of.GDP.Agri....Allied.Sector..at.current.prices.
+1                                                        16.70
+2                                                        16.82
+3                                                        12.15
+4                                                        16.00
+5                                                        15.15
+6                                                         8.74
+  Growth.Rate.of.GDP.Agri....Allied.Sector..at.constant.2004.05.prices.
+1                                                                  4.02
+2                                                                 -1.95
+3                                                                  6.65
+4                                                                  3.32
+5                                                                  4.72
+6                                                                 -0.70
+> print(names(d))
+ [1] "ï..Year"                                                                            
+ [2] "Area"                                                                               
+ [3] "Production"                                                                         
+ [4] "Yield"                                                                              
+ [5] "Area.Under.Irrigation..."                                                           
+ [6] "agricultural.workers"                                                               
+ [7] "Consumption.of.Fertilisers"                                                         
+ [8] "co.operatives.credit"                                                               
+ [9] "SCB.s.credit"                                                                       
+[10] "Total.Direct.Agriculture.credit"                                                    
+[11] "Agricultural.Imports"                                                               
+[12] "Agricultural.exports"                                                               
+[13] "Import.Export.ratio"                                                                
+[14] "Electricity.consumption.for.Agricultural.purposes..GWh."                            
+[15] "X..Share.of.electricity.for..Agricultural.Consumption.to.Total.Consumption"         
+[16] "Per.Capita.Net.Availability.of.Foodgrains..Per.Annum..in.India..Kilograms.per.year."
+[17] "Per.Capita.Net.Availability.of.Foodgrains..Per.Day..in.India..Grams.per.day."       
+[18] "Net.area.Sown"                                                                      
+[19] "Total.cropped.area"                                                                 
+[20] "Area.sown.more.than.once"                                                           
+[21] "Net.irrigated.area"                                                                 
+[22] "Gross.irrigated.area"                                                               
+[23] "Area.Irrigated.more.than.once"                                                      
+[24] "GDP.Agriculture.and.Allied.sector...at.current.prices."                             
+[25] "GDP.Agriculture.and.Allied.sector..at.constant.2004.05.prices."                     
+[26] "X..Share.of.Agriculture.and.Allied.sector.to.total.GDP..at.current.prices."         
+[27] "X..Share.of.Agriculture.and.Allied.sector.to.total.GDP..at.constant.2004.05.prices."
+[28] "Growth.Rate.of.GDP.Agri....Allied.Sector..at.current.prices."                       
+[29] "Growth.Rate.of.GDP.Agri....Allied.Sector..at.constant.2004.05.prices."              
+> #selecting dataframes
+> df_new=d[c(1:24),c(1,3,4,7,13,16,18,19,21,24,26,28,10,14,12)]
+> print(head(df_new))
+  ï..Year Production Yield Consumption.of.Fertilisers
+1    1990     176.39  1380                    12546.2
+2    1991     168.38  1382                    12728.0
+3    1992     179.48  1457                    12154.5
+4    1993     184.26  1501                    12366.0
+5    1994     191.50  1546                    13563.0
+6    1995     180.42  1491                    13867.1
+  Import.Export.ratio
+1           0.2005502
+2           0.1886020
+3           0.3181587
+4           0.1849061
+5           0.4490144
+6           0.2887624
+  Per.Capita.Net.Availability.of.Foodgrains..Per.Annum..in.India..Kilograms.per.year.
+1                                                                               186.2
+2                                                                               171.1
+3                                                                               169.4
+4                                                                               172.0
+5                                                                               180.8
+6                                                                               173.5
+  Net.area.Sown Total.cropped.area Net.irrigated.area
+1        143.00             185.74              48.02
+2        141.63             182.24              49.87
+3        142.72             185.70              50.29
+4        142.34             186.58              51.34
+5        142.96             188.05              53.00
+6        142.20             187.47              53.40
+  GDP.Agriculture.and.Allied.sector...at.current.prices.
+1                                                 154350
+2                                                 180313
+3                                                 202219
+4                                                 234566
+5                                                 270107
+6                                                 293701
+  X..Share.of.Agriculture.and.Allied.sector.to.total.GDP..at.current.prices.
+1                                                                      29.02
+2                                                                      29.39
+3                                                                      28.74
+4                                                                      28.68
+5                                                                      28.27
+6                                                                      26.26
+  Growth.Rate.of.GDP.Agri....Allied.Sector..at.current.prices.
+1                                                        16.70
+2                                                        16.82
+3                                                        12.15
+4                                                        16.00
+5                                                        15.15
+6                                                         8.74
+  Total.Direct.Agriculture.credit
+1                            5154
+2                            6393
+3                            7182
+4                            9236
+5                           10959
+6                           13864
+  Electricity.consumption.for.Agricultural.purposes..GWh.
+1                                                   50321
+2                                                   58557
+3                                                   63328
+4                                                   70699
+5                                                   79301
+6                                                   85732
+  Agricultural.exports
+1              6012.76
+2              7838.04
+3              9040.30
+4             12586.55
+5             13222.76
+6             20397.74
+> names(df_new)[1] <- "Year"
+> names(df_new)[2] <- "Production"
+> names(df_new)[3] <- "Yield"
+> names(df_new)[4] <- "Consumption_of_fertilisers"
+> names(df_new)[5] <- "Import_export_ratio"
+> names(df_new)[6] <- "Per_capita_foodgrain"
+> names(df_new)[7]<- "Net_area_sown"
+> names(df_new)[8] <- "Total_cropped_area"
+> names(df_new)[9] <- "Net_irrigated_area"
+> names(df_new)[10] <- "GDP_agriculture_and_Allied_sector"
+> names(df_new)[11] <- "agriculture_share_to_total_gdp"
+> names(df_new)[12] <- "Growth_rate_agriculture_gdp"
+> names(df_new)[13] <- "Total_direct_agricultural_credit"
+> names(df_new)[14] <- "electricity_consumption_agriculture"
+> names(df_new)[15] <- "Agricultural_exports"
+> print(head(df_new))
+  Year Production Yield Consumption_of_fertilisers
+1 1990     176.39  1380                    12546.2
+2 1991     168.38  1382                    12728.0
+3 1992     179.48  1457                    12154.5
+4 1993     184.26  1501                    12366.0
+5 1994     191.50  1546                    13563.0
+6 1995     180.42  1491                    13867.1
+  Import_export_ratio Per_capita_foodgrain Net_area_sown
+1           0.2005502                186.2        143.00
+2           0.1886020                171.1        141.63
+3           0.3181587                169.4        142.72
+4           0.1849061                172.0        142.34
+5           0.4490144                180.8        142.96
+6           0.2887624                173.5        142.20
+  Total_cropped_area Net_irrigated_area
+1             185.74              48.02
+2             182.24              49.87
+3             185.70              50.29
+4             186.58              51.34
+5             188.05              53.00
+6             187.47              53.40
+  GDP_agriculture_and_Allied_sector
+1                            154350
+2                            180313
+3                            202219
+4                            234566
+5                            270107
+6                            293701
+  agriculture_share_to_total_gdp Growth_rate_agriculture_gdp
+1                          29.02                       16.70
+2                          29.39                       16.82
+3                          28.74                       12.15
+4                          28.68                       16.00
+5                          28.27                       15.15
+6                          26.26                        8.74
+  Total_direct_agricultural_credit
+1                             5154
+2                             6393
+3                             7182
+4                             9236
+5                            10959
+6                            13864
+  electricity_consumption_agriculture Agricultural_exports
+1                               50321              6012.76
+2                               58557              7838.04
+3                               63328              9040.30
+4                               70699             12586.55
+5                               79301             13222.76
+6                               85732             20397.74
+> print(summary(df_new$Production))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  168.4   189.7   206.1   209.0   221.3   265.1 
+> print(summary(df_new$Yield))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   1380    1543    1678    1701    1814    2129 
+> print(summary(df_new$Consumption_of_fertilisers))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  12154   14198   17079   18741   23038   28122 
+> print(summary(df_new$Import_export_ratio))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.1849  0.3141  0.3910  0.4051  0.5178  0.6438 
+> print(summary(df_new$GDP_agriculture_and_Allied_sector))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 154350  338282  491850  670720  863190 1906348 
+> print(summary(df_new$agriculture_share_to_total_gdp))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  17.52   18.25   21.89   22.63   26.48   29.39 
+> print(summary(df_new$Growth_rate_agriculture_gdp))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ -2.720   8.617  13.075  11.910  15.748  21.800 
+> print(summary(df_new$Total_cropped_area))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  173.9   187.2   189.6   189.9   193.1   200.9 
+> print(summary(df_new$electricity_consumption_agriculture))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  50321   83433   89424   95257  105081  152744 
+> print(summary(df_new$Agricultural_exports))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   6013   23220   32191   61227   76271  262779 
+> print(summary(df_new$Total_direct_agricultural_credit))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   5154   14718   37517   57723   82432  202617 
+> x=df_new$Year
+> #plots
+> y=df_new$agriculture_share_to_total_gdp
+> plot(x,y,ylab = "Agriculture share to total GDP",xlab = "Time (in years)",main="Agriculture share to total GDP",type="l",lwd=2)
+Error in plot.new() : figure margins too large
+> #adf.test
+> adf.test(df_new$Production)
+
+	Augmented Dickey-Fuller Test
+
+data:  df_new$Production
+Dickey-Fuller = -0.97833, Lag order = 2, p-value =
+0.9238
+alternative hypothesis: stationary
+
+> adf.test(df_new$Yield)
+
+	Augmented Dickey-Fuller Test
+
+data:  df_new$Yield
+Dickey-Fuller = -1.0737, Lag order = 2, p-value =
+0.9097
+alternative hypothesis: stationary
+
+> adf.test(df_new$Consumption_of_fertilisers)
+
+	Augmented Dickey-Fuller Test
+
+data:  df_new$Consumption_of_fertilisers
+Dickey-Fuller = -3.0329, Lag order = 2, p-value =
+0.1789
+alternative hypothesis: stationary
+
+> adf.test(df_new$Import_export_ratio)
+
+	Augmented Dickey-Fuller Test
+
+data:  df_new$Import_export_ratio
+Dickey-Fuller = -1.6973, Lag order = 2, p-value =
+0.6877
+alternative hypothesis: stationary
+
+> adf.test(df_new$GDP_agriculture_and_Allied_sector)
+
+	Augmented Dickey-Fuller Test
+
+data:  df_new$GDP_agriculture_and_Allied_sector
+Dickey-Fuller = 1.2076, Lag order = 2, p-value = 0.99
+alternative hypothesis: stationary
+
+Warning message:
+In adf.test(df_new$GDP_agriculture_and_Allied_sector) :
+  p-value greater than printed p-value
+> adf.test(df_new$agriculture_share_to_total_gdp)
+
+	Augmented Dickey-Fuller Test
+
+data:  df_new$agriculture_share_to_total_gdp
+Dickey-Fuller = -0.087384, Lag order = 2, p-value =
+0.99
+alternative hypothesis: stationary
+
+Warning message:
+In adf.test(df_new$agriculture_share_to_total_gdp) :
+  p-value greater than printed p-value
+> adf.test(df_new$Growth_rate_agriculture_gdp)
+
+	Augmented Dickey-Fuller Test
+
+data:  df_new$Growth_rate_agriculture_gdp
+Dickey-Fuller = -1.3346, Lag order = 2, p-value =
+0.8259
+alternative hypothesis: stationary
+
+> adf.test(df_new$Total_cropped_area)
+
+	Augmented Dickey-Fuller Test
+
+data:  df_new$Total_cropped_area
+Dickey-Fuller = -1.843, Lag order = 2, p-value =
+0.6322
+alternative hypothesis: stationary
+
+> adf.test(df_new$Total_direct_agricultural_credit)
+
+	Augmented Dickey-Fuller Test
+
+data:  df_new$Total_direct_agricultural_credit
+Dickey-Fuller = 1.9535, Lag order = 2, p-value = 0.99
+alternative hypothesis: stationary
+
+Warning message:
+In adf.test(df_new$Total_direct_agricultural_credit) :
+  p-value greater than printed p-value
+> adf.test(df_new$electricity_consumption_agriculture)
+
+	Augmented Dickey-Fuller Test
+
+data:  df_new$electricity_consumption_agriculture
+Dickey-Fuller = -1.3906, Lag order = 2, p-value =
+0.8045
+alternative hypothesis: stationary
+
+> adf.test(df_new$Agricultural_exports)
+
+	Augmented Dickey-Fuller Test
+
+data:  df_new$Agricultural_exports
+Dickey-Fuller = 5.2532, Lag order = 2, p-value = 0.99
+alternative hypothesis: stationary
+
+Warning message:
+In adf.test(df_new$Agricultural_exports) :
+  p-value greater than printed p-value
+> #print(df_new$Production)
+> #adf.test 
+> adf.test(diff(log(df_new$Production),differences=3))
+
+	Augmented Dickey-Fuller Test
+
+data:  diff(log(df_new$Production), differences = 3)
+Dickey-Fuller = -5.022, Lag order = 2, p-value = 0.01
+alternative hypothesis: stationary
+
+Warning message:
+In adf.test(diff(log(df_new$Production), differences = 3)) :
+  p-value smaller than printed p-value
+> adf.test(diff(log(df_new$Yield),differences=3))
+
+	Augmented Dickey-Fuller Test
+
+data:  diff(log(df_new$Yield), differences = 3)
+Dickey-Fuller = -4.282, Lag order = 2, p-value =
+0.01342
+alternative hypothesis: stationary
+
+> adf.test(diff(log(df_new$Consumption_of_fertilisers),differences = 3))
+
+	Augmented Dickey-Fuller Test
+
+data:  diff(log(df_new$Consumption_of_fertilisers), differences = 3)
+Dickey-Fuller = -3.8703, Lag order = 2, p-value =
+0.03069
+alternative hypothesis: stationary
+
+> adf.test(diff(log(df_new$Import_export_ratio),differences=3))
+
+	Augmented Dickey-Fuller Test
+
+data:  diff(log(df_new$Import_export_ratio), differences = 3)
+Dickey-Fuller = -4.9092, Lag order = 2, p-value = 0.01
+alternative hypothesis: stationary
+
+Warning message:
+In adf.test(diff(log(df_new$Import_export_ratio), differences = 3)) :
+  p-value smaller than printed p-value
+> adf.test(diff(log(df_new$GDP_agriculture_and_Allied_sector),differences=3))
+
+	Augmented Dickey-Fuller Test
+
+data:  diff(log(df_new$GDP_agriculture_and_Allied_sector), differences = 3)
+Dickey-Fuller = -4.0747, Lag order = 2, p-value =
+0.02065
+alternative hypothesis: stationary
+
+> adf.test(diff(log(df_new$agriculture_share_to_total_gdp),differences=3))
+
+	Augmented Dickey-Fuller Test
+
+data:  diff(log(df_new$agriculture_share_to_total_gdp), differences = 3)
+Dickey-Fuller = -5.0193, Lag order = 2, p-value = 0.01
+alternative hypothesis: stationary
+
+Warning message:
+In adf.test(diff(log(df_new$agriculture_share_to_total_gdp), differences = 3)) :
+  p-value smaller than printed p-value
+> adf.test(diff(log(df_new$Total_cropped_area),differences = 3))
+
+	Augmented Dickey-Fuller Test
+
+data:  diff(log(df_new$Total_cropped_area), differences = 3)
+Dickey-Fuller = -5.7185, Lag order = 2, p-value = 0.01
+alternative hypothesis: stationary
+
+Warning message:
+In adf.test(diff(log(df_new$Total_cropped_area), differences = 3)) :
+  p-value smaller than printed p-value
+> adf.test(diff(log(df_new$Total_direct_agricultural_credit),differences = 3))
+
+	Augmented Dickey-Fuller Test
+
+data:  diff(log(df_new$Total_direct_agricultural_credit), differences = 3)
+Dickey-Fuller = -5.1512, Lag order = 2, p-value = 0.01
+alternative hypothesis: stationary
+
+Warning message:
+In adf.test(diff(log(df_new$Total_direct_agricultural_credit), differences = 3)) :
+  p-value smaller than printed p-value
+> adf.test(diff(log(df_new$electricity_consumption_agriculture),differences = 3))
+
+	Augmented Dickey-Fuller Test
+
+data:  diff(log(df_new$electricity_consumption_agriculture), differences = 3)
+Dickey-Fuller = -5.5638, Lag order = 2, p-value = 0.01
+alternative hypothesis: stationary
+
+Warning message:
+In adf.test(diff(log(df_new$electricity_consumption_agriculture),  :
+  p-value smaller than printed p-value
+> adf.test(diff(log(df_new$Agricultural_exports),differences=3))
+
+	Augmented Dickey-Fuller Test
+
+data:  diff(log(df_new$Agricultural_exports), differences = 3)
+Dickey-Fuller = -4.8428, Lag order = 2, p-value = 0.01
+alternative hypothesis: stationary
+
+Warning message:
+In adf.test(diff(log(df_new$Agricultural_exports), differences = 3)) :
+  p-value smaller than printed p-value
+> #adf.test(diff(log(df_new$Growth_rate_agriculture_gdp),differences=2))
+> #making dataframe
+> #applying log transformation and differenicing
+> production=diff(log(df_new$Production),differences=3)
+> yield=diff(log(df_new$Yield),differences=3)
+> fertiliser_consumption=diff(log(df_new$Import_export_ratio),differences = 3)
+> import_export_ratio=diff(log(df_new$GDP_agriculture_and_Allied_sector),differences = 3)
+> agricultural_GDP=diff(log(df_new$agriculture_share_to_total_gdp),differences=3)
+> agriculture_share_to_gdp=diff(log(df_new$agriculture_share_to_total_gdp),differences=3)
+> total_cropped_area=diff(log(df_new$Total_cropped_area),differences = 3)
+> total_agricultural_credit=diff(log(df_new$Total_direct_agricultural_credit),differences = 3)
+> agriculture_share_to_GDP=diff(log(df_new$agriculture_share_to_total_gdp),differences=3)
+> agriculture_export=diff(log(df_new$Agricultural_exports),differences = 3)
+> 
+> 
+> electricty_consumption_agriculture=diff(log(df_new$electricity_consumption_agriculture),differences = 3)
+> frame1=cbind(production,yield,fertiliser_consumption,import_export_ratio,agricultural_GDP,agriculture_share_to_gdp,total_cropped_area,total_agricultural_credit,agriculture_share_to_gdp,electricty_consumption_agriculture,agriculture_export)
+> print(nrow(frame1))
+[1] 21
+> ts_frame=ts(frame1,start=1993,end=2014)
+> #time series regression
+> reg1=dynlm(agricultural_GDP~yield+import_export_ratio,data=ts_frame)
+> print(summary(reg1))
+
+Time series regression with "ts" data:
+Start = 1993, End = 2014
+
+Call:
+dynlm(formula = agricultural_GDP ~ yield + import_export_ratio, 
+    data = ts_frame)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.040428 -0.013762 -0.004662  0.019719  0.038905 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(>|t|)    
+(Intercept)         0.001233   0.005279   0.234    0.818    
+yield               0.043285   0.055412   0.781    0.444    
+import_export_ratio 0.748148   0.079575   9.402 1.41e-08 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.02434 on 19 degrees of freedom
+Multiple R-squared:  0.9558,	Adjusted R-squared:  0.9511 
+F-statistic: 205.3 on 2 and 19 DF,  p-value: 1.362e-13
+
+
+> print(confint(reg1,level=0.95))
+                           2.5 %     97.5 %
+(Intercept)         -0.009815583 0.01228138
+yield               -0.072693232 0.15926409
+import_export_ratio  0.581595167 0.91470106
+> #printing residuals
+> print(resid(reg1,level=0.95))
+Time Series:
+Start = 1993 
+End = 2014 
+Frequency = 1 
+        1993         1994         1995         1996 
+ 0.001530930 -0.004108177 -0.008010222  0.038491018 
+        1997         1998         1999         2000 
+-0.008124508 -0.040427913  0.038904890 -0.002795263 
+        2001         2002         2003         2004 
+-0.016427609 -0.014400015 -0.005216028 -0.010224867 
+        2005         2006         2007         2008 
+ 0.031732847 -0.031015324  0.027941729 -0.015164506 
+        2009         2010         2011         2012 
+ 0.017230963 -0.036413381  0.026262799  0.020547928 
+        2013         2014 
+-0.011846222  0.001530930 
+> #checking for multicollinearity
+> faraway::vif(reg1)
+              yield import_export_ratio 
+             4.0355              4.0355 
+> cor(yield,import_export_ratio,method="pearson")
+[1] 0.8841998
+> 
+> #plot(yield~per_capita_foodgrain+total_cropped_area+import_export_ratio)
