@@ -1,1 +1,2 @@
 # analysis_of_agricultural_gdp_in_India_post_1991_liberlization
+In this project I have analysed the impact on agricultural GDP in India post 1991 liberalization using time series data annd I performed time series regression analysis using agricultural GDP(in Crores) post 1991 liberlization as my dependent variable and agricultural yield of foodgrains(in kg/Hectare) and and import export ratio of agrciltural commodities as my independent variables. 
